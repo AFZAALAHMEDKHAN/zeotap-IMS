@@ -1,4 +1,3 @@
-from pydantic import field_validator
 from pydantic_settings import BaseSettings
 from functools import lru_cache
 
@@ -30,18 +29,15 @@ class Settings(BaseSettings):
     db_write_max_retries: int = 3
     db_write_retry_backoff: float = 0.5
 
-    # CORS allowed origins (comma-separated in env var, e.g. "https://a.com,https://b.com")
-    cors_allowed_origins: list[str] = [
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-    ]
+    # CORS allowed origins as a comma-separated string. Stored as `str` (not `list[str]`)
+    # because pydantic-settings runs json.loads() on list-typed env vars before any
+    # validator gets to see them, and comma-separated values are not valid JSON.
+    # Use settings.cors_origins_list to get the parsed list.
+    cors_allowed_origins: str = "http://localhost:3000,http://127.0.0.1:3000"
 
-    @field_validator("cors_allowed_origins", mode="before")
-    @classmethod
-    def _parse_cors_origins(cls, value):
-        if isinstance(value, str):
-            return [origin.strip() for origin in value.split(",") if origin.strip()]
-        return value
+    @property
+    def cors_origins_list(self) -> list[str]:
+        return [o.strip() for o in self.cors_allowed_origins.split(",") if o.strip()]
 
     class Config:
         env_file = ".env"
