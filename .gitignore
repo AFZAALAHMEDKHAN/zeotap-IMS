@@ -1,6 +1,11 @@
 # Ignore Python cache directories
 __pycache__/
 
+
+# Node
+node_modules/
+
+
 # Virtual environment
 env/
 .venv/
