@@ -39,7 +39,7 @@ flowchart LR
     Worker --> Strategy[Alert Strategy Registry<br/>RDBMS / Cache / API / Queue / MCP]
     Strategy --> Worker
 
-    Worker --> RedisDebounce[Redis Debounce Key<br/>debounce:{component_id}<br/>TTL 10s]
+    Worker --> RedisDebounce["Redis Debounce Key<br/>debounce:{component_id}<br/>TTL 10s"]
     RedisDebounce -->|existing key| ExistingWI[Increment existing WorkItem signal_count]
     RedisDebounce -->|missing key| NewWI[Create new WorkItem]
 
