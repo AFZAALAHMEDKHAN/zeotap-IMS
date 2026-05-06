@@ -1,0 +1,22 @@
+# Ignore Python cache directories
+__pycache__/
+
+# Virtual environment
+env/
+.venv/
+
+# Byte-compiled / optimized / DLL files
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+.eggs/
+*.egg-info/
+
+# VS Code
+.vscode/
+
+# MacOS
+.DS_Store
