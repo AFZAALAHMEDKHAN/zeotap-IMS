@@ -20,8 +20,28 @@ dist/
 .eggs/
 *.egg-info/
 
-# VS Code
-.vscode/
+# Pytest / coverage
+.pytest_cache/
+.coverage
+htmlcov/
 
-# MacOS
+# Frontend build output
+frontend/dist/
+
+# npm / yarn logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.swp
+
+# macOS
 .DS_Store
