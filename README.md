@@ -15,13 +15,17 @@ The project is async-first throughout and uses purpose-built storage for each co
 
 ## Dashboard Preview
 
-<!--
-  Screenshot / GIF of the dashboard goes here.
-  Suggested filename: docs/assets/dashboard.png
-  Markdown:           ![Dashboard](docs/assets/dashboard.png)
--->
+### Live Incidents Feed
 
-*Screenshot will be added here before final submission.*
+Active WorkItems sorted by severity, with debounced signal counts and one-click status transitions.
+
+![Dashboard](docs/assets/dashboard.png)
+
+### Signal Fire
+
+Manual trigger page for preset failure scenarios (RDBMS outage, cache failure, API gateway failure, MCP host failure, queue backlog) — useful for demoing the full pipeline without running the simulation script.
+
+![Signal Fire](docs/assets/signalfire.png)
 
 ---
 
