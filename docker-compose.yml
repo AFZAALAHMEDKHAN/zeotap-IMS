@@ -1,0 +1,96 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: ims_postgres
+    environment:
+      POSTGRES_USER: ims_user
+      POSTGRES_PASSWORD: ims_password
+      POSTGRES_DB: ims_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ims_user -d ims_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  mongodb:
+    image: mongo:6-jammy
+    container_name: ims_mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ims_user
+      MONGO_INITDB_ROOT_PASSWORD: ims_password
+      MONGO_INITDB_DATABASE: ims_signals
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: ims_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ims_backend
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_URL=postgresql+asyncpg://ims_user:ims_password@postgres:5432/ims_db
+      - MONGODB_URL=mongodb://ims_user:ims_password@mongodb:27017/ims_signals?authSource=admin
+      - REDIS_URL=redis://redis:6379/0
+      - RATE_LIMIT_PER_MINUTE=600000
+      - QUEUE_MAX_SIZE=50000
+      - DEBOUNCE_WINDOW_SECONDS=10
+      - METRICS_INTERVAL_SECONDS=5
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+    restart: on-failure
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: ims_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8000
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+volumes:
+  postgres_data:
+  mongo_data:
+  redis_data:
