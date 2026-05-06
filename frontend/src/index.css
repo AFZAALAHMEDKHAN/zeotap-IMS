@@ -1,0 +1,112 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Core palette */
+  --bg-base:       #0d0e11;
+  --bg-surface:    #13151a;
+  --bg-elevated:   #1a1d24;
+  --bg-hover:      #21252f;
+  --border:        #2a2d36;
+  --border-bright: #3d4150;
+
+  /* Text */
+  --text-primary:   #e8eaf0;
+  --text-secondary: #8b909e;
+  --text-muted:     #555966;
+
+  /* Severity colors */
+  --p0:       #ff3b3b;
+  --p0-dim:   #3d1010;
+  --p0-glow:  rgba(255, 59, 59, 0.15);
+  --p1:       #ff8c00;
+  --p1-dim:   #3d2200;
+  --p1-glow:  rgba(255, 140, 0, 0.15);
+  --p2:       #f5c518;
+  --p2-dim:   #332d00;
+  --p2-glow:  rgba(245, 197, 24, 0.12);
+
+  /* Status colors */
+  --open:          #ff3b3b;
+  --investigating: #ff8c00;
+  --resolved:      #00b894;
+  --closed:        #555966;
+
+  /* Signal green */
+  --green:     #00b894;
+  --green-dim: #003d2f;
+
+  /* Accent */
+  --accent:     #4d9fff;
+  --accent-dim: #0d2a4a;
+
+  /* Typography */
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+
+  /* Spacing */
+  --radius-sm: 3px;
+  --radius:    6px;
+  --radius-lg: 10px;
+}
+
+html, body, #root {
+  height: 100%;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-surface); }
+::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #555; }
+
+/* Selection */
+::selection { background: var(--accent-dim); color: var(--accent); }
+
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; font-family: inherit; }
+input, textarea, select {
+  font-family: inherit;
+  color: var(--text-primary);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* Utility classes */
+.mono { font-family: var(--font-mono); }
+.text-muted { color: var(--text-muted); }
+.text-secondary { color: var(--text-secondary); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.fade-in { animation: fadeIn 0.25s ease both; }
